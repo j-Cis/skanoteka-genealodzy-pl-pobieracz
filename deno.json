@@ -1,8 +1,8 @@
 {
   "tasks": {
-    "start": "deno run --watch --allow-net --allow-read --allow-write pobieracz-skanoteki.ts"
+    "start": "deno run --allow-net --allow-read --allow-write pobieracz-skanoteki.ts"
   },
-  "version": "0.0.1",
+  "version": "0.0.2",
   "compilerOptions": {
     "noUnusedLocals": true,
     "noUnusedParameters": true,
