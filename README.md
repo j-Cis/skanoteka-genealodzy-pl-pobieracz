@@ -6,11 +6,11 @@ aby móc skorzystać potrzebujesz
 - utworzyć plik zadania (dla wygody polecam darmowy edytor VSCODE)
 - uruchomić program (ewentualnie dostosować do swoich potrzeb)
 - jak tego urzyć?
- - pobierz w terminalu/konsoli
+  - pobierz w terminalu/konsoli
    ```shell
     git clone https://github.com/j-Cis/skanoteka-pobieracz.git
    ```
- - liknij pobierz "Source code" na stronie <https://github.com/j-Cis/skanoteka-pobieracz/releases>
+  - liknij pobierz "Source code" na stronie <https://github.com/j-Cis/skanoteka-pobieracz/releases>
 
 ## `1.` Instalowanie DENO
 
