@@ -1,8 +1,70 @@
 {
-	"deno.enable": true,
-	"editor.formatOnSave": true,
-	"editor.defaultFormatter": "denoland.vscode-deno",
-	"[toml]": {
-		"editor.defaultFormatter": "tamasfe.even-better-toml"
-	}
+  "deno.enable": true,
+  "deno.lint": true,
+  "editor.formatOnSave": true,
+  "files.readonlyInclude": {
+      "deno.lock": true,
+      "**/deno.lock": true,
+  },
+  "material-icon-theme.activeIconPack": "react_redux",
+  "material-icon-theme.folders.associations": {
+    "islands": "Animation",
+  },
+  "material-icon-theme.files.associations": {
+    "**/fresh.ts": "Deno",    
+  },
+  "editor.defaultFormatter": "denoland.vscode-deno",
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+    "editor.wordWrap": "on"
+  },
+  "css.customData": [
+    ".vscode/tailwind.json"
+  ],
+  "cSpell.words": [
+    "asynciterable",
+    "cpath",
+    "csvg",
+    "datetime",
+    "preact",
+    "Skanoteka",
+    "tailwindcss"
+  ],
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.productIconTheme": "material-product-icons",
+  "files.associations": {
+    "*.yrf": "json",
+    "*.rpx": "xml",
+    "*.tsx": "typescriptreact",
+    ".env*": "dotenv",
+    "*.stl": "json"
+  },
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "explorer.confirmDragAndDrop": false,
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "search.exclude": {
+    "**/.history": true
+  },
+  "editor.tabSize": 2,
+  "editor.minimap.enabled": true,
+  "editor.fontFamily": "Fira Code",
+  "editor.fontLigatures": true,
+  "editor.fontWeight": "450",
+  "terminal.external.windowsExec": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+  "cSpell.language": "en, pl"
 }

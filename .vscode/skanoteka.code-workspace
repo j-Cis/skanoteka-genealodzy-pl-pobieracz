@@ -1,0 +1,39 @@
+{
+  "folders": [
+    {
+      // KLIENT
+      "name": "CLIENT",
+      "path": "../client/"
+    },
+    {
+      // DOKUMENTACJA
+      "name": "DOCS",
+      "path": "../docs/"
+    },
+    {
+      // USTAWIENIA VSCODE
+      "name": ".VSCODE",
+      "path": "../.vscode/"
+    },
+    {
+      // USTAWIENIA GITHUB
+      "name": ".GITHUB",
+      "path": "../.github/"
+    },
+    {
+      // USTAWIENIA GIT
+      "name": ".GIT",
+      "path": "../.git/"
+    },
+    {
+      // CAŁOŚĆ
+      "name": "_",
+      "path": "../"
+    }
+  ],
+  "settings": {
+    "cSpell.words": [
+      "linkcode"
+    ]
+  }
+}

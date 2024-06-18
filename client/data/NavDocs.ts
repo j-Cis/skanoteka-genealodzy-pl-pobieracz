@@ -1,0 +1,395 @@
+import * as C from "@std/fmt/colors";
+import PlikiMarkdown from "$utils/classes/PlikiMarkdown.ts";
+
+const plikiMD = new PlikiMarkdown("../docs");
+const TAB_KATEGORIE = plikiMD.kategorie;
+const TAB_DOKUMENTY = plikiMD.dokumenty;
+function urlPierwszegoDokumentu(lang:string){
+  const wsadWersji = TAB_DOKUMENTY[lang];
+  if (wsadWersji) {
+    for (const address in wsadWersji) {
+      return wsadWersji[address].href;
+    }
+  }
+  throw new Error(`Nie znaleziono wersji językowej  "${lang}"`);
+}
+
+
+
+
+
+
+
+
+import type {
+  TableOfCategory,
+  TableOfContents,
+  TableOfContentsCategory,
+  TableOfContentsCategoryEntry,
+  TableOfContentsEntry,
+  RawTableOfContents,
+} from "$types/NavDocs.d.ts";
+
+import FRESH_VERSIONS from "../versions.json" with { type: "json" };
+import { ContainerWithChildren } from "npm:postcss@8.4.35/lib/container";
+
+
+
+
+
+const DOCS: string = "../docs";
+const LINK: string = "/docs"; //"/docs";
+
+const TABLE_OF_CONTENTS: TableOfContents = {};
+const CATEGORIES: TableOfCategory = {};
+
+const toc: [string, RawTableOfContents] = ["/wsparcie", {
+  pl: {
+    label: "pl",
+    content: {
+      wsparcie: {
+        title: "Wsparcie",
+        link: "pl",
+      },
+      system: {
+        title: "Używanie Twojego Systemu",
+        link: "pl",
+        pages: [
+          ["uzywanie-konsoli", "Używanie Konsoli", "link:pl"],
+          ["instalacja-deno", "Instalacja Deno", "link:pl"],
+          ["uzywanie-przegladarki", "Używanie Przeglądarki", "link:pl"],
+          ["instalacja-vscode", "Instalacja VSCode (opcjonalnie)", "link:pl"],
+          ["uzywanie-vscode", "Używanie VSCode (opcjonalnie)", "link:pl"],
+        ],
+      },
+      "skanoteka-pobieracz-0-0-2": {
+        title: "SKANOTEKA-pobieracz wersja 0.0.2",
+        link: "pl",
+        pages: [
+          ["instalacja", "Instalacja", "link:pl"],
+          ["instrukcja", "Instrukcja użycia", "link:pl"],
+          ["nowe-zadanie", "Tworzenie nowego zadania", "link:pl"],
+          ["konfiguracja", "Dostosowywanie programu", "link:pl"],
+        ],
+      },
+      "skanoteka-skrobacz-0-0-3": {
+        title: "SKANOTEKA-skrobacz wersja 0.0.3",
+        link: "pl",
+        pages: [
+          ["instalacja", "Instalacja", "link:pl"],
+          ["instrukcja", "Instrukcja użycia", "link:pl"],
+          ["nowe-zadanie", "Tworzenie nowego zadania", "link:pl"],
+          ["konfiguracja", "Dostosowywanie programu", "link:pl"],
+        ],
+      },
+    },
+  },
+}];
+
+const toc2: [string, RawTableOfContents] = ["/introduction", {
+  canary: {
+    label: "canary",
+    content: {
+      "the-canary-version": {
+        title: "The canary version",
+      },
+      introduction: {
+        title: "Introduction",
+        link: "latest",
+      },
+      "getting-started": {
+        title: "Getting Started",
+        link: "latest",
+        pages: [
+          ["create-a-project", "Create a project", "link:latest"],
+          ["running-locally", "Running locally", "link:latest"],
+          ["create-a-route", "Create a route", "link:latest"],
+          ["dynamic-routes", "Dynamic routes", "link:latest"],
+          ["custom-handlers", "Custom handlers", "link:latest"],
+          ["form-submissions", "Form submissions", "link:latest"],
+          ["adding-interactivity", "Adding interactivity", "link:latest"],
+          ["deploy-to-production", "Deploy to production", "link:latest"],
+        ],
+      },
+      concepts: {
+        title: "Concepts",
+        link: "latest",
+        pages: [
+          ["architecture", "Architecture", "link:latest"],
+          ["server-components", "Server Components", "link:latest"],
+          ["routing", "Routing", "link:latest"],
+          ["routes", "Routes", "link:latest"],
+          ["app-wrapper", "App wrapper", "link:latest"],
+          ["layouts", "Layouts", "link:latest"],
+          ["forms", "Forms", "link:latest"],
+          ["islands", "Interactive islands", "link:latest"],
+          ["static-files", "Static files", "link:latest"],
+          ["middleware", "Middlewares", "link:latest"],
+          ["error-pages", "Error pages", "link:latest"],
+          ["partials", "Partials", "link:latest"],
+          ["data-fetching", "Data fetching", "link:latest"],
+          ["ahead-of-time-builds", "Ahead-of-time Builds", "link:latest"],
+          ["deployment", "Deployment", "link:latest"],
+          ["plugins", "Plugins", "link:latest"],
+          ["updating", "Updating Fresh", "link:latest"],
+          ["server-configuration", "Server configuration", "link:latest"],
+        ],
+      },
+      integrations: {
+        title: "Integrations",
+        link: "latest",
+      },
+      examples: {
+        title: "Examples",
+        link: "latest",
+        pages: [
+          ["migration-guide", "Migration Guide", "link:canary"],
+          ["migrating-to-tailwind", "Migrating to Tailwind", "link:latest"],
+          ["modifying-the-head", "Modifying the <head>", "link:latest"],
+          ["writing-tests", "Writing tests", "link:latest"],
+          [
+            "changing-the-src-dir",
+            "Changing the source directory",
+            "link:latest",
+          ],
+          ["using-twind-v1", "Using Twind v1", "link:latest"],
+          ["init-the-server", "Initializing the server", "link:latest"],
+          [
+            "using-fresh-canary-version",
+            "Using Fresh canary version",
+            "link:latest",
+          ],
+          ["dealing-with-cors", "Dealing with CORS", "link:latest"],
+          ["creating-a-crud-api", "Creating a CRUD API", "link:latest"],
+          ["handling-complex-routes", "Handling complex routes", "link:latest"],
+          ["rendering-markdown", "Rendering markdown", "link:latest"],
+          ["rendering-raw-html", "Rendering raw HTML", "link:latest"],
+          [
+            "sharing-state-between-islands",
+            "Sharing state between islands",
+            "link:latest",
+          ],
+          ["using-csp", "Using CSP", "link:latest"],
+          ["active-links", "Styling active links", "link:latest"],
+        ],
+      },
+    },
+  },
+  latest: {
+    label: FRESH_VERSIONS[0],
+    content: {
+      introduction: {
+        title: "Introduction",
+      },
+      "getting-started": {
+        title: "Getting Started",
+        pages: [
+          ["create-a-project", "Create a project"],
+          ["running-locally", "Running locally"],
+          ["create-a-route", "Create a route"],
+          ["dynamic-routes", "Dynamic routes"],
+          ["custom-handlers", "Custom handlers"],
+          ["form-submissions", "Form submissions"],
+          ["adding-interactivity", "Adding interactivity"],
+          ["deploy-to-production", "Deploy to production"],
+        ],
+      },
+      concepts: {
+        title: "Concepts",
+        pages: [
+          ["architecture", "Architecture"],
+          ["server-components", "Server Components"],
+          ["routing", "Routing"],
+          ["routes", "Routes"],
+          ["app-wrapper", "App wrapper"],
+          ["layouts", "Layouts"],
+          ["forms", "Forms"],
+          ["islands", "Interactive islands"],
+          ["static-files", "Static files"],
+          ["middleware", "Middlewares"],
+          ["error-pages", "Error pages"],
+          ["partials", "Partials"],
+          ["data-fetching", "Data fetching"],
+          ["ahead-of-time-builds", "Ahead-of-time Builds"],
+          ["deployment", "Deployment"],
+          ["plugins", "Plugins"],
+          ["updating", "Updating Fresh"],
+          ["server-configuration", "Server configuration"],
+        ],
+      },
+      integrations: {
+        title: "Integrations",
+      },
+      examples: {
+        title: "Examples",
+        pages: [
+          ["migrating-to-tailwind", "Migrating to Tailwind"],
+          ["modifying-the-head", "Modifying the <head>"],
+          ["writing-tests", "Writing tests"],
+          ["changing-the-src-dir", "Changing the source directory"],
+          ["using-twind-v1", "Using Twind v1"],
+          ["init-the-server", "Initializing the server"],
+          ["using-fresh-canary-version", "Using Fresh canary version"],
+          ["dealing-with-cors", "Dealing with CORS"],
+          ["creating-a-crud-api", "Creating a CRUD API"],
+          ["handling-complex-routes", "Handling complex routes"],
+          ["rendering-markdown", "Rendering markdown"],
+          ["rendering-raw-html", "Rendering raw HTML"],
+          ["sharing-state-between-islands", "Sharing state between islands"],
+          ["using-csp", "Using CSP"],
+          ["active-links", "Styling active links"],
+          [
+            "client-side-components-and-libraries",
+            "Client only side components",
+          ],
+        ],
+      },
+    },
+  },
+}];
+
+
+const VERSIONS = Object.keys(toc[1]);
+
+const CANARY_VERSION = toc[1].canary ? "canary" : "";
+const LATEST_VERSION = VERSIONS.find((version) => version !== "canary") ?? "";
+
+
+
+for (const version in toc[1]) {
+  const RAW_VERSION = toc[1][version];
+  const versionSlug = `/${version}`;
+  
+  TABLE_OF_CONTENTS[version] = {};
+  CATEGORIES[version] = [];
+
+  for (const parent in RAW_VERSION.content) {
+    const rawEntry = RAW_VERSION.content[parent];
+
+    const fileVersion = rawEntry.link ?? version;
+    const versionFilePath = `/${fileVersion}`;
+
+    const href = `${LINK}${versionSlug}/${parent}`;
+    const file = `${DOCS}${versionFilePath}/${parent}/index.md`;
+
+    const entry = { slug: parent, title: rawEntry.title, href, file };
+    TABLE_OF_CONTENTS[version][parent] = entry;
+    const category: TableOfContentsCategory = {
+      title: rawEntry.title,
+      href,
+      entries: [],
+    };
+    CATEGORIES[version].push(category);
+    if (rawEntry.pages) {
+      for (const [id, title, linkedVersion] of rawEntry.pages) {
+        const slug = `${parent}/${id}`;
+        const href = `${LINK}${versionSlug}/${slug}`;
+        const file = `${DOCS}${versionSlug}/${slug}.md`;
+
+        const entry = { slug, title, category: parent, href, file };
+        TABLE_OF_CONTENTS[version][slug] = entry;
+        category.entries.push({
+          title,
+          href,
+        });
+      }
+    }
+  }
+}
+
+function getFirstPageUrl(version: string) {
+  const group = TABLE_OF_CONTENTS[version];
+  if (group) {
+    for (const slug in group) {
+      return group[slug].href;
+    }
+  }
+
+  throw new Error(`Could not find version "${version}"`);
+}
+
+
+//console.log(C.bgBlue(" ".repeat(55)));
+//console.log(C.bgBlue(C.yellow("TABLE_OF_CONTENTS")));
+//console.log(TABLE_OF_CONTENTS);
+//console.log(C.bgBlue(" ".repeat(55)));
+//console.log();
+//console.log(C.bgGreen(" ".repeat(55)));
+//console.log(C.bgGreen(C.white("CATEGORIES")));
+//console.log(CATEGORIES);
+//console.log(C.bgGreen(" ".repeat(55)));
+//console.log();
+
+
+
+
+
+
+
+//const toc3 = ((items: WalkEntry[])=>{
+//
+//  let tree = new Map();
+//
+//  
+//  for (const i of items) {
+//    const item = i.path.split("\\").slice(2);
+//    if(item.length==1 && i.isDirectory && !(tree.has(item[0]))){
+//      tree.set(item[0],new Map());
+//      console.log(i.isFile,item);
+//      //console.log();
+//
+//      //.hasOwnProperty
+//    }    
+//    //if(item.length>1){
+//    //  console.log(i.isFile,item);
+//    //  //.hasOwnProperty
+//    //}    
+//  }
+//  console.log(tree);
+//})();
+
+//console.log(walkSync("../docs"));
+
+
+//for (const dirEntry of Deno.readDirSync("../docs")) {
+//  console.log(dirEntry.name);
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export {
+  TAB_KATEGORIE,  
+  TAB_DOKUMENTY,
+  urlPierwszegoDokumentu,
+  CATEGORIES,
+  getFirstPageUrl,
+  LATEST_VERSION,
+  TABLE_OF_CONTENTS,
+  type TableOfContentsCategory,
+  type TableOfContentsCategoryEntry,
+  type TableOfContentsEntry,
+  VERSIONS,
+  toc,
+  LINK,
+};
