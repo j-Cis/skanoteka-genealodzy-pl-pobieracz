@@ -1,10 +1,11 @@
 {
   "tasks": {
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
-    "dev": "deno run -A --watch=static/,routes/ dev.ts",
+    "dev": "deno run -A --watch=static/,routes/,../dosc/ dev.ts",
     "build": "deno run -A dev.ts build",
     "start": "deno run -A main.ts",
-    "update": "deno run -A -r jsr:@fresh/update ."
+    "update": "deno run -A -r jsr:@fresh/update .",
+    "test:wczytajMD": "deno run -A --watch tests/wczytajMD.ts"
   },
   "imports": {
     "@fresh/core": "jsr:@fresh/core@^2.0.0-alpha.16",
@@ -45,6 +46,7 @@
     "$types/": "./types/",
     "$islands/": "./islands/",
     "$data/": "./data/",
+    "$batch/": "./batch/",
     "$components/": "./components/"
   },
   "compilerOptions": {

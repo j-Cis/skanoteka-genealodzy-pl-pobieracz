@@ -2,6 +2,17 @@
   "deno.enable": true,
   "deno.lint": true,
   "editor.formatOnSave": true,
+  "files.readonlyInclude": {
+      "deno.lock": true,
+      "**/deno.lock": true,
+  },
+  "material-icon-theme.activeIconPack": "react_redux",
+  "material-icon-theme.folders.associations": {
+    "islands": "Animation",
+  },
+  "material-icon-theme.files.associations": {
+    "**/fresh.ts": "Deno",    
+  },
   "editor.defaultFormatter": "denoland.vscode-deno",
   "[toml]": {
     "editor.defaultFormatter": "tamasfe.even-better-toml"
@@ -22,6 +33,9 @@
     "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
     "editor.wordWrap": "on"
   },
+  "css.customData": [
+    ".vscode/tailwind.json"
+  ],
   "cSpell.words": [
     "asynciterable",
     "cpath",
@@ -40,20 +54,11 @@
     ".env*": "dotenv",
     "*.stl": "json"
   },
-  "material-icon-theme.activeIconPack": "react_redux",
-  "material-icon-theme.folders.associations": {
-    "islands": "Animation",
-    "signals": "Decorators",
-    "states": "Decorators"
-  },
   "typescript.updateImportsOnFileMove.enabled": "always",
   "explorer.confirmDragAndDrop": false,
   "terminal.integrated.defaultProfile.windows": "PowerShell",
   "search.exclude": {
     "**/.history": true
-  },
-  "files.readonlyInclude": {
-    "fresh.gen.ts": true
   },
   "editor.tabSize": 2,
   "editor.minimap.enabled": true,

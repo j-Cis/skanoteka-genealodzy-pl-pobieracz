@@ -1,19 +1,21 @@
+// import { type PageProps } from "@fresh/core";
 import { asset } from "@fresh/core/runtime";
 import define from "$utils/fresh.ts";
 
+// export default function App({ Component }: PageProps) {
 export default define.page(function App({ Component, state, url }) {
   return (
     <html>
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {/*<title>fresh-project</title>*/}
         {state.title ? <title>{state.title}</title> : null}
-        {/*<title>skanoteka-skrobacz</title>*/}
-        {state.description
-          ? <meta name="description" content={state.description} />
-          : null}
         {state.title
           ? <meta property="og:title" content={state.title} />
+          : null}
+        {state.description
+          ? <meta name="description" content={state.description} />
           : null}
         {state.description
           ? <meta property="og:description" content={state.description} />
@@ -24,15 +26,13 @@ export default define.page(function App({ Component, state, url }) {
           ? <meta property="og:image" content={state.ogImage} />
           : null}
         {state.noIndex ? <meta name="robots" content="noindex" /> : null}
-        {
-          /*<link
+        <link
           rel="preload"
-          href={asset("/fonts/FixelVariable.woff2")}
+          href={asset("/fonts/NovaRound.woff2")}
           as="font"
           type="font/woff2"
           crossorigin="true"
-        />*/
-        }
+        />
         <link rel="stylesheet" href={asset("/styles.css")} />
         {url.pathname === "/"
           ? <link rel="stylesheet" href={asset("/prism.css")} />

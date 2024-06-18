@@ -7,7 +7,7 @@ export function ServerCodePage(
 ) {
   return (
     <>
-      <Layout navShow={true} navActive="/_" asideShow={false}>
+      <Layout navShow={true} navActive="" asideShow={false}>
         <section>
           <div class="text-center">
             <h1 class="text-6xl md:text-9xl font-extrabold">
@@ -19,7 +19,7 @@ export function ServerCodePage(
             </p>
 
             <p class="p-4">
-              <a href="/" class="hover:underline">Back to the Homepage</a>
+              <a href="/" class="hover:underline">Back to the Homepage (fresh init blank app - example)</a>
             </p>
           </div>
         </section>

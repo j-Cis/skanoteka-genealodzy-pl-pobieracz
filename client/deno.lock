@@ -25,6 +25,7 @@
       "jsr:@std/path@^0.225.2": "jsr:@std/path@0.225.2",
       "jsr:@std/semver@^0.224.2": "jsr:@std/semver@0.224.3",
       "jsr:@std/yaml@^0.224.1": "jsr:@std/yaml@0.224.1",
+      "npm:@preact/signals@1.2.3": "npm:@preact/signals@1.2.3_preact@10.22.0",
       "npm:@preact/signals@^1.2.3": "npm:@preact/signals@1.2.3_preact@10.22.0",
       "npm:autoprefixer@10.4.17": "npm:autoprefixer@10.4.17_postcss@8.4.35",
       "npm:cssnano@6.0.3": "npm:cssnano@6.0.3_postcss@8.4.35",

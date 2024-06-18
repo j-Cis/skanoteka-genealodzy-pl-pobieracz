@@ -1,125 +1,104 @@
 import { HttpError, page } from "@fresh/core";
 import { asset, Partial } from "@fresh/core/runtime"; 
 import { h } from "@preact";
-
+import * as C from "@std/fmt/colors";
 import define from "$utils/fresh.ts";
 import { frontMatter, renderMarkdown } from "$utils/markdown.ts";
-
-import type { Data, NavEntry, VersionLink } from "$types/NavDocs.d.ts";
-
 import Layout from "$components/Layout.tsx";
 import SidebarCategory from "$components/NavRoutesDocs.tsx";
+import { TAB_KATEGORIE, TAB_DOKUMENTY, urlPierwszegoDokumentu } from "$data/NavDocs.ts";
+import { Wersje, NavEntry } from "$utils/types/PlikiMarkdown.d.ts";
+import AccordionForDocs from "$islands/AccordionForDocs.tsx";
 
-import {
-  CATEGORIES,
-  getFirstPageUrl,
-  LATEST_VERSION,
-  TABLE_OF_CONTENTS,
-  toc,
-  LINK,
-} from "$data/NavDocs.ts";
-
-//import { TableOfContents } from "../../islands/TableOfContents.tsx";
-//import SearchButton from "../../islands/SearchButton.tsx";
-//import VersionSelect from "../../islands/VersionSelect.tsx";
-
-import { bgBlue, bgCyan, bgGreen, bgRed } from "@std/fmt/colors";
-
-const pattern = new URLPattern({ pathname: "/:version/:page*" });
+const pattern = new URLPattern({ pathname: "/:lang/:page*" });
 
 export const handler = define.handlers<Data>({
   async GET(ctx) {
-    const slug = ctx.params.slug;
-
-    // Check if the slug is the index page of a version tag
-    if (TABLE_OF_CONTENTS[slug]) {
-      const href = getFirstPageUrl(slug);
+    const address = ctx.params.address;
+    // TODO dodać obsługę języków
+    if (TAB_DOKUMENTY["pl"][address]) {
+      const href = urlPierwszegoDokumentu(address);
       return new Response("", {
         status: 307,
         headers: { location: href },
-      });
+      });      
     }
-
-    const match = pattern.exec("https://localhost/" + slug);
+    const match = pattern.exec("https://localhost/" /* + 'pl/' */ + address);
 
     if (!match) {
       throw new HttpError(404);
     }
 
-    let { version, page: path = "" } = match.pathname.groups;
-    if (!version) {
+    let { lang, page: path = "" } = match.pathname.groups;
+    if (!lang) {
       throw new HttpError(404);
     }
 
-    // Latest version doesn't show up in the url
-    if (!TABLE_OF_CONTENTS[version]) {
-      path = version + (path ? "/" + path : "");
-      version = LATEST_VERSION;
+    if (!TAB_DOKUMENTY[lang]) {
+      path = lang + (path ? "/" + path : "");
+      lang = "pl";
     }
-
-    // Check if the page exists
-    const currentToc = TABLE_OF_CONTENTS[version];
-    const entry = currentToc[path];
-    if (!entry) {
+    const wybranaWersja = TAB_DOKUMENTY[lang];
+    const wsad = wybranaWersja[path];
+    if (!wsad) {
       throw new HttpError(404);
     }
 
-    // Build up the link map for the version selector.
-    const versionLinks: VersionLink[] = [];
-    for (const version in TABLE_OF_CONTENTS) {
-      const label = toc[1][version].label;
-      const maybeEntry = TABLE_OF_CONTENTS[version][path];
-
-      // Check if the same page is available for this version and
-      // link to that. Pick the index page for that version if an
-      // exact match doesn't exist.
-      versionLinks.push({
+    const wersje: Wersje[] = [];
+    for (const wersja in TAB_DOKUMENTY) {
+      const label = wersja;
+      const opcjonalnyWsad = TAB_DOKUMENTY[wersja][path]
+      wersje.push({
         label,
-        value: version,
-        href: maybeEntry ? maybeEntry.href : getFirstPageUrl(version),
+        value: wersja,
+        href: opcjonalnyWsad ? opcjonalnyWsad.href : urlPierwszegoDokumentu(wersja),
       });
     }
 
-    // Add previous and next page entry if available
 
-    const entryKeys = Object.keys(currentToc);
-    const idx = entryKeys.findIndex((name) => name === entry.slug);
 
+    const entryKeys = Object.keys(wybranaWersja);
+    const idx = entryKeys.findIndex((name) => name === wsad.address);
+
+    
     let nextNav: NavEntry | undefined;
     let prevNav: NavEntry | undefined;
-    const prevEntry = currentToc[entryKeys[idx - 1]];
-    const nextEntry = currentToc[entryKeys[idx + 1]];
+    const prevEntry = wybranaWersja[entryKeys[idx - 1]];
+    const nextEntry = wybranaWersja[entryKeys[idx + 1]];
 
     if (prevEntry) {
       let category = prevEntry.category;
-      category = category ? currentToc[category].title : "";
+      category = category ? wybranaWersja[category].title : "";
       prevNav = { title: prevEntry.title, category, href: prevEntry.href };
     }
 
     if (nextEntry) {
       let category = nextEntry.category;
-      category = category ? currentToc[category].title : "";
+      category = category ? wybranaWersja[category].title : "";
       nextNav = { title: nextEntry.title, category, href: nextEntry.href };
     }
 
-    // Parse markdown front matter
-    const url = new URL(`../../${entry.file}`, import.meta.url);
+
+
+    // & PRASOWANIE PLIKÓW MARKDOWN PRZEZ FRON-MATTER
+
+    const url = new URL(`../../${wsad.file}`, import.meta.url);
     const fileContent = await Deno.readTextFile(url);
     const { body, attrs } = frontMatter<Record<string, unknown>>(fileContent);
 
-    ctx.state.title = `${entry.title ?? "Not Found"} | Fresh docs`;
+    ctx.state.title = `${wsad.title ?? "Not Found"} | docs`;
     ctx.state.description = attrs?.description
       ? String(attrs.description)
-      : "Fresh Document";
-    ctx.state.ogImage = new URL(asset("/og-image.webp"), ctx.url).href;
+      : "Document";
+    //ctx.state.ogImage = new URL(asset("/og-image.webp"), ctx.url).href;
 
     return page({
       page: {
-        ...entry,
+        ...wsad,
         markdown: body,
         data: attrs ?? {},
-        versionLinks,
-        version,
+        wersje,
+        lang,
         prevNav,
         nextNav,
       },
@@ -130,22 +109,13 @@ export const handler = define.handlers<Data>({
 export default define.page<typeof handler>(function DocsPage(props) {
   const { page } = props.data;
   const { html, headings } = renderMarkdown(page.markdown);
-
+  const LINK: string = "/docs";
   return (
     <Layout
       navShow={true}
       navActive={LINK}
       asideShow={true}
-      aside={
-        <ul class="list-inside font-semibold nested ml-2.5">
-          {CATEGORIES[page.version].map((category) => (
-            <SidebarCategory
-              key={category.href}
-              category={category}
-            />
-          ))}
-        </ul>
-      }
+      aside={<AccordionForDocs />}
       footShow={false}
       foot={
         <span class="bg-black text-white">
@@ -155,22 +125,18 @@ export default define.page<typeof handler>(function DocsPage(props) {
     >
       <Partial name="docs-main">
         <div class="w-full min-w-0">
-          <main class="lg:ml-[18rem] mt-4 min-w-0 mx-auto">
-            <div class="flex gap-6 md:gap-8 xl:gap-[8%] flex-col xl:flex-row md:mx-8 lg:mx-16 2xl:mx-0 lg:justify-center">
+          <main class=" mt-4 min-w-0 mx-auto">
+            <div class="flex gap-6 md:gap-8 xl:gap-[8%] flex-col xl:flex-row md:mx-8 lg:mx-10 2xl:mx-0 lg:justify-center">
               {/*<TableOfContents headings={headings} />*/}
-
               <div class="lg:order-1 min-w-0 max-w-3xl w-full">
-                <h1 class="text-4xl text-gray-900 tracking-tight font-bold md:mt-0 px-4 md:px-0 mb-4">
-                  {page.title}
-                </h1>
+                {/*<h1 class="text-4xl text-gray-900 tracking-tight font-bold md:mt-0 px-4 md:px-0 mb-4"> {page.title} </h1>*/}
                 <div
                   class="markdown-body mb-8 p-6"
                   dangerouslySetInnerHTML={{ __html: html }}
                 />
-
                 <div class="mb-8">
                   <ForwardBackButtons
-                    slug={page.slug}
+                    address={page.address}
                     version={page.version}
                     prev={page.prevNav}
                     next={page.nextNav}
@@ -204,8 +170,9 @@ export default define.page<typeof handler>(function DocsPage(props) {
   );
 });
 
+
 function ForwardBackButtons(props: {
-  slug: string;
+  address: string;
   version: string;
   prev?: NavEntry;
   next?: NavEntry;

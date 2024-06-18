@@ -1,3 +1,26 @@
+import * as C from "@std/fmt/colors";
+import PlikiMarkdown from "$utils/classes/PlikiMarkdown.ts";
+
+const plikiMD = new PlikiMarkdown("../docs");
+const TAB_KATEGORIE = plikiMD.kategorie;
+const TAB_DOKUMENTY = plikiMD.dokumenty;
+function urlPierwszegoDokumentu(lang:string){
+  const wsadWersji = TAB_DOKUMENTY[lang];
+  if (wsadWersji) {
+    for (const address in wsadWersji) {
+      return wsadWersji[address].href;
+    }
+  }
+  throw new Error(`Nie znaleziono wersji językowej  "${lang}"`);
+}
+
+
+
+
+
+
+
+
 import type {
   TableOfCategory,
   TableOfContents,
@@ -8,9 +31,14 @@ import type {
 } from "$types/NavDocs.d.ts";
 
 import FRESH_VERSIONS from "../versions.json" with { type: "json" };
+import { ContainerWithChildren } from "npm:postcss@8.4.35/lib/container";
+
+
+
+
 
 const DOCS: string = "../docs";
-const LINK: string ="/docs";
+const LINK: string = "/docs"; //"/docs";
 
 const TABLE_OF_CONTENTS: TableOfContents = {};
 const CATEGORIES: TableOfCategory = {};
@@ -231,6 +259,7 @@ const LATEST_VERSION = VERSIONS.find((version) => version !== "canary") ?? "";
 for (const version in toc[1]) {
   const RAW_VERSION = toc[1][version];
   const versionSlug = `/${version}`;
+  
   TABLE_OF_CONTENTS[version] = {};
   CATEGORIES[version] = [];
 
@@ -279,7 +308,80 @@ function getFirstPageUrl(version: string) {
   throw new Error(`Could not find version "${version}"`);
 }
 
-export {  
+
+//console.log(C.bgBlue(" ".repeat(55)));
+//console.log(C.bgBlue(C.yellow("TABLE_OF_CONTENTS")));
+//console.log(TABLE_OF_CONTENTS);
+//console.log(C.bgBlue(" ".repeat(55)));
+//console.log();
+//console.log(C.bgGreen(" ".repeat(55)));
+//console.log(C.bgGreen(C.white("CATEGORIES")));
+//console.log(CATEGORIES);
+//console.log(C.bgGreen(" ".repeat(55)));
+//console.log();
+
+
+
+
+
+
+
+//const toc3 = ((items: WalkEntry[])=>{
+//
+//  let tree = new Map();
+//
+//  
+//  for (const i of items) {
+//    const item = i.path.split("\\").slice(2);
+//    if(item.length==1 && i.isDirectory && !(tree.has(item[0]))){
+//      tree.set(item[0],new Map());
+//      console.log(i.isFile,item);
+//      //console.log();
+//
+//      //.hasOwnProperty
+//    }    
+//    //if(item.length>1){
+//    //  console.log(i.isFile,item);
+//    //  //.hasOwnProperty
+//    //}    
+//  }
+//  console.log(tree);
+//})();
+
+//console.log(walkSync("../docs"));
+
+
+//for (const dirEntry of Deno.readDirSync("../docs")) {
+//  console.log(dirEntry.name);
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export {
+  TAB_KATEGORIE,  
+  TAB_DOKUMENTY,
+  urlPierwszegoDokumentu,
   CATEGORIES,
   getFirstPageUrl,
   LATEST_VERSION,
@@ -289,4 +391,5 @@ export {
   type TableOfContentsEntry,
   VERSIONS,
   toc,
+  LINK,
 };

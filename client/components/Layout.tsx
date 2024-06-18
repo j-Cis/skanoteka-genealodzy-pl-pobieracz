@@ -1,7 +1,8 @@
 import { ComponentChildren, h } from "preact";
-import { NAVIGATION_LINK } from "../data/NavApp.ts";
-//type LayoutType =
-
+/* WHY IS NOT WORKING?
+import { NAVIGATION_LINK } from "$batch/NavApp.ts";
+*/
+import { NAVIGATION_LINK } from "../batch/NavApp.ts";
 function Layout(props: {
   children: ComponentChildren;
   navShow: boolean;
