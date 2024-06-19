@@ -1,0 +1,14 @@
+{
+	"files": [
+		{
+			"path": "routes/docs/[...address].tsx",
+			"bookmarks": [
+				{
+					"line": 114,
+					"column": 42,
+					"label": "szerokość md"
+				}
+			]
+		}
+	]
+}

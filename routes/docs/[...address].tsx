@@ -6,12 +6,11 @@ import define from "$utils/fresh.ts";
 import Layout from "$components/Layout.tsx";
 import AccordionForDocs from "$islands/AccordionForDocs.tsx";
 
+//###
 import {
-  DOCS_MD,
-  type NavDocsEntry,
-  type RouteDocMD,
-  ROUTES_DOCS_MD,
-  type RoutesDocsMD,
+  DOCS_MD_ROUTES,
+  DOCS_MD_TREE,
+  type RouteMarkdownDoc,
 } from "../../batch/NavDocs.ts";
 
 import { frontMatter, renderMarkdown } from "$utils/markdown.ts";
@@ -21,38 +20,39 @@ const pattern = new URLPattern({ pathname: "/:page*" });
 export const handler = define.handlers<Data>({
   async GET(ctx) {
     const address = ctx.params.address;
-    console.log(C.bgBlue(`address = ${address} `));
+    console.log(C.bgBlue(`ctx.url.hostname: ${ctx.url.hostname}`));
 
     const match = pattern.exec("https://localhost/" + address);
     if (!match) throw new HttpError(404);
     let { page: path = "" } = match.pathname.groups;
 
-    const wsad = ROUTES_DOCS_MD[path];
+    const wsad = DOCS_MD_ROUTES[path];
     if (!wsad) throw new HttpError(404);
 
-    const entryKeys = Object.keys(ROUTES_DOCS_MD);
+    const entryKeys = Object.keys(DOCS_MD_ROUTES);
     const idx = entryKeys.findIndex((name) => name === wsad.address);
 
-    let nextNav: NavDocsEntry | undefined;
-    let prevNav: NavDocsEntry | undefined;
-    const prevEntry = ROUTES_DOCS_MD[entryKeys[idx - 1]];
-    const nextEntry = ROUTES_DOCS_MD[entryKeys[idx + 1]];
+    let nextNav: RouteMarkdownDoc | undefined;
+    let prevNav: RouteMarkdownDoc | undefined;
+    const prevEntry = DOCS_MD_ROUTES[entryKeys[idx - 1]];
+    const nextEntry = DOCS_MD_ROUTES[entryKeys[idx + 1]];
 
     if (prevEntry) {
       let category = prevEntry.category;
-      category = category ? ROUTES_DOCS_MD[category].title : "";
+      category = category ? DOCS_MD_ROUTES[category].title : "";
       prevNav = { title: prevEntry.title, category, href: prevEntry.href };
     }
 
     if (nextEntry) {
       let category = nextEntry.category;
-      category = category ? ROUTES_DOCS_MD[category].title : "";
+      category = category ? DOCS_MD_ROUTES[category].title : "";
       nextNav = { title: nextEntry.title, category, href: nextEntry.href };
     }
 
     // & PRASOWANIE PLIKÓW MARKDOWN PRZEZ FRON-MATTER
 
     const url = new URL(`../../${wsad.file}`, import.meta.url);
+
     const fileContent = await Deno.readTextFile(url);
     const { body, attrs } = frontMatter<Record<string, unknown>>(fileContent);
 
@@ -83,7 +83,7 @@ export default define.page<typeof handler>(function DocsPage(props) {
       navShow={true}
       navActive={LINK}
       asideShow={true}
-      aside={<AccordionForDocs />}
+      aside={<AccordionForDocs tree={DOCS_MD_TREE} />}
       footShow={false}
       foot={
         <span class="bg-black text-white">
@@ -137,8 +137,8 @@ export default define.page<typeof handler>(function DocsPage(props) {
 function ForwardBackButtons(props: {
   address: string;
   version: string;
-  prev?: NavDocsEntry;
-  next?: NavDocsEntry;
+  prev?: RouteMarkdownDoc;
+  next?: RouteMarkdownDoc;
 }): h.JSX.Element {
   const { prev, next } = props;
 

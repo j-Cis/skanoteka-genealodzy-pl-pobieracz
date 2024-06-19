@@ -29,17 +29,14 @@ Istnieją co najmniej 4 metody, na otwarcie (**terminala** / **konsoli**) **Powe
 ---
 
 ![..](../../../../static/imgs/docs/PowerShellOtwieranieMetoda1.webp)
-![..](/imgs/docs/PowerShellOtwieranieMetoda1.webp)
 
 ---
 
 ![..](../../../../static/imgs/docs/PowerShellOtwieranieMetoda2.webp)
-![..](/imgs/docs/PowerShellOtwieranieMetoda2.webp)
 
 ---
 
 ![..](../../../../static/imgs/docs/PowerShellOtwieranieMetoda3i4.webp)
-![..](/imgs/docs/PowerShellOtwieranieMetoda3i4.webp)
 
 ---
 

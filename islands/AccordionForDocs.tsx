@@ -1,134 +1,14 @@
 import { type Signal, signal, useSignal } from "@preact/signals";
 import { ComponentChildren, h } from "preact";
 
-interface DocMD {
-  category?: string;
-  address: string;
-  href: string;
-  file: string;
-  title: string;
-}
+import { docsMD_makeHrefWWW, type TreeDocsMD } from "../batch/NavDocs.ts";
 
-export default function AccordionForDocs(): h.JSX.Element {
-  const tab: {
-    name: string;
-    link: string;
-    show: Signal<boolean>;
-    nest: {
-      name: string;
-      link: string;
-      show: Signal<boolean>;
-      nest: {
-        name: string;
-        link: string;
-        show: Signal<boolean>;
-        nest: never[];
-      }[];
-    }[];
-  }[] = [
-    {
-      name: "Zanim zaczniesz",
-      link: "/docs/zanim_zaczniesz",
-      show: useSignal(false),
-      nest: [
-        {
-          name: "Środowisko wykonawcze DeNo",
-          link: "/docs/zanim_zaczniesz/srodowisko_deno",
-          show: useSignal(false),
-          nest: [
-            {
-              name: "instalacja",
-              link: "/docs/zanim_zaczniesz/srodowisko_deno/instalacja",
-              show: useSignal(false),
-              nest: [],
-            },
-          ],
-        },
-        {
-          name: "Rozbudowany edytor tekstu vsCODE",
-          link: "/docs/zanim_zaczniesz/edytor_vscode",
-          show: useSignal(false),
-          nest: [
-            {
-              name: "instalacja",
-              link: "/docs/zanim_zaczniesz/edytor_vscode/instalacja",
-              show: useSignal(false),
-              nest: [],
-            },
-          ],
-        },
-        {
-          name: "Przeglądarka internetowa",
-          link: "/docs/zanim_zaczniesz/przegladarka",
-          show: useSignal(false),
-          nest: [
-            {
-              name: "instalacja",
-              link: "/docs/zanim_zaczniesz/przegladarka/instalacja",
-              show: useSignal(false),
-              nest: [],
-            },
-          ],
-        },
-        {
-          name: "terminal",
-          link: "/docs/zanim_zaczniesz/terminal",
-          show: useSignal(false),
-          nest: [
-            {
-              name: "instalacja",
-              link: "/docs/zanim_zaczniesz/terminal/instalacja",
-              show: useSignal(false),
-              nest: [],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      name: "skanoteka - pobieracz",
-      link: "/docs/skanoteka-pobieracz",
-      show: useSignal(true),
-      nest: [
-        {
-          name: "v0.0.x",
-          link: "/docs/skanoteka-pobieracz/v0.0.2",
-          show: useSignal(true),
-          nest: [
-            {
-              name: "instalacja",
-              link: "/docs/skanoteka-pobieracz/v0.0.2/instalacja",
-              show: useSignal(false),
-              nest: [],
-            },
-            {
-              name: "instrukcja",
-              link: "/docs/skanoteka-pobieracz/v0.0.2/instrukcja",
-              show: useSignal(false),
-              nest: [],
-            },
-            {
-              name: "konfiguracja",
-              link: "/docs/skanoteka-pobieracz/v0.0.2/konfiguracja",
-              show: useSignal(false),
-              nest: [],
-            },
-            {
-              name: "nowe - zadanie",
-              link: "/docs/skanoteka-pobieracz/v0.0.2/nowe-zadanie",
-              show: useSignal(false),
-              nest: [],
-            },
-          ],
-        },
-        {
-          name: "v0.1.x",
-          link: "/docs/skanoteka-pobieracz/v0.1.0",
-          show: useSignal(false),
-          nest: [],
-        },
-      ],
-    },
+export default function AccordionForDocs(props: {
+  tree: TreeDocsMD[];
+}): h.JSX.Element {
+  const HUE: [string, string] = [
+    "hover:decoration-cyan-700",
+    "hover:decoration-pink-700",
   ];
 
   function AccordionContainer(props: {
@@ -285,100 +165,47 @@ export default function AccordionForDocs(): h.JSX.Element {
     );
   }
 
+  function AccordionRecursive(props: {
+    treeTabs: TreeDocsMD[];
+    decorationColorTrueFalse: [string, string];
+  }): h.JSX.Element {
+    return (
+      <AccordionContainer>
+        {props.treeTabs.map((L) => {
+          switch (L.nest.length) {
+            case 0:
+              return (
+                <LabelItem
+                  labelIsLink={true}
+                  label={L.name}
+                  href={docsMD_makeHrefWWW(L.path)}
+                  decorationColorTrueFalse={props.decorationColorTrueFalse}
+                />
+              );
+            default:
+              return (
+                <AccordionItem
+                  labelIsLink={true}
+                  label={L.name}
+                  href={docsMD_makeHrefWWW(L.path)}
+                  show={L.show}
+                >
+                  {L.nest.length === 0 && <div></div>}
+                  {L.nest.length > 0 && (
+                    <AccordionRecursive
+                      treeTabs={L.nest}
+                      decorationColorTrueFalse={props.decorationColorTrueFalse}
+                    />
+                  )}
+                </AccordionItem>
+              );
+          }
+        })}
+      </AccordionContainer>
+    );
+  }
+
   return (
-    <AccordionContainer>
-      {tab.map((a) => {
-        switch (a.nest.length) {
-          case 0:
-            return (
-              <LabelItem
-                labelIsLink={true}
-                label={a.name}
-                href={a.link}
-                decorationColorTrueFalse={[
-                  "hover:decoration-cyan-700",
-                  "hover:decoration-pink-700",
-                ]}
-              />
-            );
-          default:
-            return (
-              <AccordionItem
-                labelIsLink={true}
-                label={a.name}
-                href={a.link}
-                show={a.show}
-              >
-                {a.nest.length === 0 && <div></div>}
-                {a.nest.length > 0 && (
-                  <AccordionContainer>
-                    {a.nest.map((b) => {
-                      switch (b.nest.length) {
-                        case 0:
-                          return (
-                            <LabelItem
-                              labelIsLink={true}
-                              label={b.name}
-                              href={b.link}
-                              decorationColorTrueFalse={[
-                                "hover:decoration-cyan-700",
-                                "hover:decoration-pink-700",
-                              ]}
-                            />
-                          );
-                        default:
-                          return (
-                            <AccordionItem
-                              labelIsLink={true}
-                              label={b.name}
-                              href={b.link}
-                              show={b.show}
-                            >
-                              {b.nest.length === 0 && <div>0</div>}
-                              {b.nest.length > 0 && (
-                                <AccordionContainer>
-                                  {b.nest.map((c) => {
-                                    switch (c.nest.length) {
-                                      case 0:
-                                        return (
-                                          <LabelItem
-                                            labelIsLink={true}
-                                            label={c.name}
-                                            href={c.link}
-                                            decorationColorTrueFalse={[
-                                              "hover:decoration-cyan-700",
-                                              "hover:decoration-pink-700",
-                                            ]}
-                                          />
-                                        );
-                                      default:
-                                        return (
-                                          <AccordionItem
-                                            labelIsLink={true}
-                                            label={c.name}
-                                            href={c.link}
-                                            show={c.show}
-                                          >
-                                            {c.nest.length === 0 && (
-                                              <div>0</div>
-                                            )}
-                                            {c.nest.length > 0 && <div>X</div>}
-                                          </AccordionItem>
-                                        );
-                                    }
-                                  })}
-                                </AccordionContainer>
-                              )}
-                            </AccordionItem>
-                          );
-                      }
-                    })}
-                  </AccordionContainer>
-                )}
-              </AccordionItem>
-            );
-        }
-      })}
-    </AccordionContainer>
+    <AccordionRecursive treeTabs={props.tree} decorationColorTrueFalse={HUE} />
   );
 }
