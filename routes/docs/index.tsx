@@ -5,7 +5,7 @@ import define from "$utils/fresh.ts";
 //const LINK: string = "/docs";
 
 export const handler = define.handlers({
-  GET: (ctx) => {
+  GET: (_ctx) => {
     //const address = ctx.params.address;
 
     //if (address === "concepts/architechture") {

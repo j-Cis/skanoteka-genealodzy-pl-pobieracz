@@ -24,6 +24,7 @@
     "@std/expect": "jsr:@std/expect@^0.224.4",
     "@std/fmt": "jsr:@std/fmt@^0.225.3",
     "@std/fs": "jsr:@std/fs@^0.229.1",
+    "@std/toml": "jsr:@std/toml@^0.224.1",
     "@std/html": "jsr:@std/html@^0.224.2",
     "@std/jsonc": "jsr:@std/jsonc@^0.224.1",
     "@std/media-types": "jsr:@std/media-types@^1.0.0-rc.1",

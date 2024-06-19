@@ -6,8 +6,13 @@ import define from "$utils/fresh.ts";
 import Layout from "$components/Layout.tsx";
 import AccordionForDocs from "$islands/AccordionForDocs.tsx";
 
-import DOCS_MD from "../../batch/NavDocs.ts";
-import type { DocMD, DocsMD, NavDocsEntry } from "../../batch/NavDocs.ts";
+import {
+  DOCS_MD,
+  type NavDocsEntry,
+  type RouteDocMD,
+  ROUTES_DOCS_MD,
+  type RoutesDocsMD,
+} from "../../batch/NavDocs.ts";
 
 import { frontMatter, renderMarkdown } from "$utils/markdown.ts";
 
@@ -22,26 +27,26 @@ export const handler = define.handlers<Data>({
     if (!match) throw new HttpError(404);
     let { page: path = "" } = match.pathname.groups;
 
-    const wsad = DOCS_MD[path];
+    const wsad = ROUTES_DOCS_MD[path];
     if (!wsad) throw new HttpError(404);
 
-    const entryKeys = Object.keys(DOCS_MD);
+    const entryKeys = Object.keys(ROUTES_DOCS_MD);
     const idx = entryKeys.findIndex((name) => name === wsad.address);
 
     let nextNav: NavDocsEntry | undefined;
     let prevNav: NavDocsEntry | undefined;
-    const prevEntry = DOCS_MD[entryKeys[idx - 1]];
-    const nextEntry = DOCS_MD[entryKeys[idx + 1]];
+    const prevEntry = ROUTES_DOCS_MD[entryKeys[idx - 1]];
+    const nextEntry = ROUTES_DOCS_MD[entryKeys[idx + 1]];
 
     if (prevEntry) {
       let category = prevEntry.category;
-      category = category ? DOCS_MD[category].title : "";
+      category = category ? ROUTES_DOCS_MD[category].title : "";
       prevNav = { title: prevEntry.title, category, href: prevEntry.href };
     }
 
     if (nextEntry) {
       let category = nextEntry.category;
-      category = category ? DOCS_MD[category].title : "";
+      category = category ? ROUTES_DOCS_MD[category].title : "";
       nextNav = { title: nextEntry.title, category, href: nextEntry.href };
     }
 
@@ -106,19 +111,19 @@ export default define.page<typeof handler>(function DocsPage(props) {
                 </div>
                 <hr />
                 {
-                  /*<div class="px-4 md:px-0 flex justify-between my-6">
-                        <a       https://github.com/j-Cis/skanoteka-pobieracz
-                          href={`https://github.com/denoland/fresh/edit/main/${page.file}`}
-                          class="text-green-600 underline flex items-center"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <svg class="w-4 h-4 inline-block mr-1">
-                            <use href="/icons.svg#external" />
-                          </svg>
-                          Edit this page on GitHub
-                        </a>
-                      </div>*/
+                  <div class="px-4 md:px-0 flex justify-between my-6">
+                    <a
+                      href={`https://github.com/j-Cis/skanoteka-pobieracz/edit/main/${page.file}`}
+                      class="text-black underline flex items-center"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <svg class="w-4 h-4 inline-block mr-1">
+                        <use href={asset("/svgs/icons.svg#external")} />
+                      </svg>
+                      Edytuj tę stronę na GitHub
+                    </a>
+                  </div>
                 }
               </div>
             </div>

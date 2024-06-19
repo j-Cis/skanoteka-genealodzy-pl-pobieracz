@@ -37,14 +37,22 @@
     ".vscode/tailwind.json"
   ],
   "cSpell.words": [
+    "ˈdiːnoʊ",
     "asynciterable",
+    "choco",
     "cpath",
     "csvg",
     "datetime",
+    "deno",
+    "diːnoʊ",
     "pobieracz",
     "preact",
+    "pupillaria",
     "Skanoteka",
-    "tailwindcss"
+    "successionalia",
+    "sygnaturalne",
+    "tailwindcss",
+    "uruchomieniowe"
   ],
   "workbench.iconTheme": "material-icon-theme",
   "workbench.productIconTheme": "material-product-icons",
@@ -67,5 +75,8 @@
   "editor.fontLigatures": true,
   "editor.fontWeight": "450",
   "terminal.external.windowsExec": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
-  "cSpell.language": "en, pl"
+  "cSpell.language": "en, pl",
+  "workbench.editorAssociations": {
+    "*.md": "default"
+  }
 }
