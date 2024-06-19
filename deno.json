@@ -4,8 +4,7 @@
     "dev": "deno run -A --watch=client/static/,client/routes/,dosc/ client/dev.ts",
     "build": "deno run -A client/dev.ts build",
     "start": "deno run -A client/main.ts",
-    "update": "deno run -A -r jsr:@fresh/update ./client/",
-    "client:dev:": "deno task --cwd=client dev"
+    "update": "deno run -A -r jsr:@fresh/update ./client/"
   },
   "imports": {
     "@fresh/core": "jsr:@fresh/core@^2.0.0-alpha.16",
