@@ -39,14 +39,7 @@ export const DOCS_MD_TREE:TreeDocsMD[] = [
         path: [`zanim_zaczniesz`, `srodowisko_deno`],
         name: "Środowisko wykonawcze DeNo",
         show: signal(false),
-        nest: [ 
-          {
-            path: [`zanim_zaczniesz`, `srodowisko_deno`,`instalacja`],
-            name: "instalacja",
-            show: signal(false),
-            nest: [ ]
-          },
-        ],
+        nest: [ ],
       },
       {
         path: [`zanim_zaczniesz`, `edytor_vscode`],

@@ -66,7 +66,7 @@ class DefaultRenderer extends Marked.Renderer {
   }
 
   image(src: string, title: string | null, alt: string | null) {
-    return `<img src="${src.replaceAll("../../../../static/imgs/", "/imgs/")}" alt="${alt ?? ""}" title="${title ?? ""}" />`;
+    return `<img src="${src.replaceAll("../../../../static/imgs/", "/imgs/").replaceAll("../../../static/imgs/", "/imgs/")}" alt="${alt ?? ""}" title="${title ?? ""}" />`;
   }
 
   code(code: string, info: string | undefined): string {
