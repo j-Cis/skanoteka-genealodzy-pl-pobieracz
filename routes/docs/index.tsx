@@ -17,7 +17,7 @@ export const handler = define.handlers({
 
     return new Response("", {
       status: 307,
-      headers: { location: `/docs/pl/skanoteka-pobieracz` },
+      headers: { location: `/docs/skanoteka-pobieracz` },
     });
   },
 });

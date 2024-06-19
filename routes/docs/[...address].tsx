@@ -1,84 +1,49 @@
 import { HttpError, page } from "@fresh/core";
-import { asset, Partial } from "@fresh/core/runtime"; 
+import { asset, Partial } from "@fresh/core/runtime";
 import { h } from "@preact";
 import * as C from "@std/fmt/colors";
 import define from "$utils/fresh.ts";
-import { frontMatter, renderMarkdown } from "$utils/markdown.ts";
 import Layout from "$components/Layout.tsx";
-import SidebarCategory from "$components/NavRoutesDocs.tsx";
-import { TAB_KATEGORIE, TAB_DOKUMENTY, urlPierwszegoDokumentu } from "$data/NavDocs.ts";
-import { Wersje, NavEntry } from "$utils/types/PlikiMarkdown.d.ts";
 import AccordionForDocs from "$islands/AccordionForDocs.tsx";
 
-const pattern = new URLPattern({ pathname: "/:lang/:page*" });
+import DOCS_MD from "../../batch/NavDocs.ts";
+import type { DocMD, DocsMD, NavDocsEntry } from "../../batch/NavDocs.ts";
+
+import { frontMatter, renderMarkdown } from "$utils/markdown.ts";
+
+const pattern = new URLPattern({ pathname: "/:page*" });
 
 export const handler = define.handlers<Data>({
   async GET(ctx) {
     const address = ctx.params.address;
-    // TODO dodać obsługę języków
-    if (TAB_DOKUMENTY["pl"][address]) {
-      const href = urlPierwszegoDokumentu(address);
-      return new Response("", {
-        status: 307,
-        headers: { location: href },
-      });      
-    }
-    const match = pattern.exec("https://localhost/" /* + 'pl/' */ + address);
+    console.log(C.bgBlue(`address = ${address} `));
 
-    if (!match) {
-      throw new HttpError(404);
-    }
+    const match = pattern.exec("https://localhost/" + address);
+    if (!match) throw new HttpError(404);
+    let { page: path = "" } = match.pathname.groups;
 
-    let { lang, page: path = "" } = match.pathname.groups;
-    if (!lang) {
-      throw new HttpError(404);
-    }
+    const wsad = DOCS_MD[path];
+    if (!wsad) throw new HttpError(404);
 
-    if (!TAB_DOKUMENTY[lang]) {
-      path = lang + (path ? "/" + path : "");
-      lang = "pl";
-    }
-    const wybranaWersja = TAB_DOKUMENTY[lang];
-    const wsad = wybranaWersja[path];
-    if (!wsad) {
-      throw new HttpError(404);
-    }
-
-    const wersje: Wersje[] = [];
-    for (const wersja in TAB_DOKUMENTY) {
-      const label = wersja;
-      const opcjonalnyWsad = TAB_DOKUMENTY[wersja][path]
-      wersje.push({
-        label,
-        value: wersja,
-        href: opcjonalnyWsad ? opcjonalnyWsad.href : urlPierwszegoDokumentu(wersja),
-      });
-    }
-
-
-
-    const entryKeys = Object.keys(wybranaWersja);
+    const entryKeys = Object.keys(DOCS_MD);
     const idx = entryKeys.findIndex((name) => name === wsad.address);
 
-    
-    let nextNav: NavEntry | undefined;
-    let prevNav: NavEntry | undefined;
-    const prevEntry = wybranaWersja[entryKeys[idx - 1]];
-    const nextEntry = wybranaWersja[entryKeys[idx + 1]];
+    let nextNav: NavDocsEntry | undefined;
+    let prevNav: NavDocsEntry | undefined;
+    const prevEntry = DOCS_MD[entryKeys[idx - 1]];
+    const nextEntry = DOCS_MD[entryKeys[idx + 1]];
 
     if (prevEntry) {
       let category = prevEntry.category;
-      category = category ? wybranaWersja[category].title : "";
+      category = category ? DOCS_MD[category].title : "";
       prevNav = { title: prevEntry.title, category, href: prevEntry.href };
     }
 
     if (nextEntry) {
       let category = nextEntry.category;
-      category = category ? wybranaWersja[category].title : "";
+      category = category ? DOCS_MD[category].title : "";
       nextNav = { title: nextEntry.title, category, href: nextEntry.href };
     }
-
-
 
     // & PRASOWANIE PLIKÓW MARKDOWN PRZEZ FRON-MATTER
 
@@ -97,8 +62,6 @@ export const handler = define.handlers<Data>({
         ...wsad,
         markdown: body,
         data: attrs ?? {},
-        wersje,
-        lang,
         prevNav,
         nextNav,
       },
@@ -127,7 +90,6 @@ export default define.page<typeof handler>(function DocsPage(props) {
         <div class="w-full min-w-0">
           <main class=" mt-4 min-w-0 mx-auto">
             <div class="flex gap-6 md:gap-8 xl:gap-[8%] flex-col xl:flex-row md:mx-8 lg:mx-10 2xl:mx-0 lg:justify-center">
-              {/*<TableOfContents headings={headings} />*/}
               <div class="lg:order-1 min-w-0 max-w-3xl w-full">
                 {/*<h1 class="text-4xl text-gray-900 tracking-tight font-bold md:mt-0 px-4 md:px-0 mb-4"> {page.title} </h1>*/}
                 <div
@@ -145,7 +107,7 @@ export default define.page<typeof handler>(function DocsPage(props) {
                 <hr />
                 {
                   /*<div class="px-4 md:px-0 flex justify-between my-6">
-                        <a
+                        <a       https://github.com/j-Cis/skanoteka-pobieracz
                           href={`https://github.com/denoland/fresh/edit/main/${page.file}`}
                           class="text-green-600 underline flex items-center"
                           target="_blank"
@@ -160,9 +122,6 @@ export default define.page<typeof handler>(function DocsPage(props) {
                 }
               </div>
             </div>
-            <div class="xl:ml-[3.75rem]">
-              {/*<Footer />*/}
-            </div>
           </main>
         </div>
       </Partial>
@@ -170,45 +129,52 @@ export default define.page<typeof handler>(function DocsPage(props) {
   );
 });
 
-
 function ForwardBackButtons(props: {
   address: string;
   version: string;
-  prev?: NavEntry;
-  next?: NavEntry;
+  prev?: NavDocsEntry;
+  next?: NavDocsEntry;
 }): h.JSX.Element {
   const { prev, next } = props;
+
+  function SeqPage(props: {
+    href?: string;
+    title?: string;
+    label?: string;
+  }): h.JSX.Element {
+    return (
+      <a
+        href={props.href}
+        class="px-4 py-2 text-left bg-white rounded border border-gray-200 grid border-solid w-full hover:border-green-600 transition-colors"
+      >
+        <span class="text-sm text-gray-600">
+          {props.label}
+        </span>
+        <span class="text-green-600 font-medium">
+          {props.title}
+        </span>
+      </a>
+    );
+  }
 
   return (
     <div class="px-4 md:px-0 mt-8 flex flex-col sm:flex-row gap-4 justify-between">
       {prev
         ? (
-          <a
+          <SeqPage
             href={prev.href}
-            class="px-4 py-2 text-left rounded border border-gray-200 grid border-solid w-full hover:border-green-600 transition-colors"
-          >
-            <span class="text-sm text-gray-600">
-              Previous page
-            </span>
-            <span class="text-green-600 font-medium">
-              {prev.title}
-            </span>
-          </a>
+            label="Poprzednia strona"
+            title={prev.title}
+          />
         )
         : <div class="w-full" />}
       {next
         ? (
-          <a
+          <SeqPage
             href={next.href}
-            class="px-4 py-2 text-right rounded border border-gray-200 border-solid grid w-full hover:border-green-600 transition-colors"
-          >
-            <span class="text-sm text-gray-600">
-              Next page
-            </span>
-            <span class="text-green-600 font-medium">
-              {next.title}
-            </span>
-          </a>
+            label="Następna strona"
+            title={next.title}
+          />
         )
         : <div class="w-full" />}
     </div>

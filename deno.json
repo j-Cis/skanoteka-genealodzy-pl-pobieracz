@@ -42,12 +42,10 @@
     "@prism-yaml": "https://esm.sh/prismjs@1.29.0/components/prism-yaml.js?no-check",
     "@marked": "https://esm.sh/marked@7.0.2",
     "@marked-mangle": "https://esm.sh/marked-mangle@1.0.1",
-    "$utils/": "./utils/",
-    "$types/": "./types/",
+    "$components/": "./components/",
     "$islands/": "./islands/",
-    "$data/": "./data/",
-    "$batch/": "./batch/",
-    "$components/": "./components/"
+    "$utils/": "./utils/",
+    "$batch/": "./batch/"
   },
   "compilerOptions": {
     "lib": [

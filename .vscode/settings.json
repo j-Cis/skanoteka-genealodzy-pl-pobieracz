@@ -3,15 +3,15 @@
   "deno.lint": true,
   "editor.formatOnSave": true,
   "files.readonlyInclude": {
-      "deno.lock": true,
-      "**/deno.lock": true,
+    "deno.lock": true,
+    "**/deno.lock": true
   },
   "material-icon-theme.activeIconPack": "react_redux",
   "material-icon-theme.folders.associations": {
-    "islands": "Animation",
+    "islands": "Animation"
   },
   "material-icon-theme.files.associations": {
-    "**/fresh.ts": "Deno",    
+    "**/fresh.ts": "Deno"
   },
   "editor.defaultFormatter": "denoland.vscode-deno",
   "[toml]": {
@@ -41,6 +41,7 @@
     "cpath",
     "csvg",
     "datetime",
+    "pobieracz",
     "preact",
     "Skanoteka",
     "tailwindcss"

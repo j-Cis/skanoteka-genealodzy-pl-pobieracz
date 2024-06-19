@@ -2,7 +2,7 @@
 
 const NAVIGATION_LINK: NavigationLink[] = [
   {
-    name: "skanoteka-pobieracz",
+    name: "Wprowadzenie",
     href: "/docs",
   },
   {
