@@ -31,4 +31,4 @@ jobs:
         with:
           project: "skanoteka-pobieracz"
           entrypoint: "main.ts"
-          root: "./client/"
+          root: "."

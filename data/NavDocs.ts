@@ -1,7 +1,7 @@
 import * as C from "@std/fmt/colors";
 import PlikiMarkdown from "$utils/classes/PlikiMarkdown.ts";
 
-const plikiMD = new PlikiMarkdown("../docs");
+const plikiMD = new PlikiMarkdown("./docs");
 const TAB_KATEGORIE = plikiMD.kategorie;
 const TAB_DOKUMENTY = plikiMD.dokumenty;
 function urlPierwszegoDokumentu(lang:string){

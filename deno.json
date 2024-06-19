@@ -1,10 +1,11 @@
 {
   "tasks": {
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
-    "dev": "deno run -A --watch=client/static/,client/routes/,dosc/ client/dev.ts",
-    "build": "deno run -A client/dev.ts build",
-    "start": "deno run -A client/main.ts",
-    "update": "deno run -A -r jsr:@fresh/update ./client/"
+    "dev": "deno run -A --watch=static/,routes/,dosc/ dev.ts",
+    "build": "deno run -A dev.ts build",
+    "start": "deno run -A main.ts",
+    "update": "deno run -A -r jsr:@fresh/update .",
+    "test:wczytajMD": "deno run -A --watch tests/wczytajMD.ts"
   },
   "imports": {
     "@fresh/core": "jsr:@fresh/core@^2.0.0-alpha.16",
@@ -41,12 +42,12 @@
     "@prism-yaml": "https://esm.sh/prismjs@1.29.0/components/prism-yaml.js?no-check",
     "@marked": "https://esm.sh/marked@7.0.2",
     "@marked-mangle": "https://esm.sh/marked-mangle@1.0.1",
-    "$utils/": "./client/utils/",
-    "$types/": "./client/types/",
-    "$islands/": "./client/islands/",
-    "$data/": "./client/data/",
-    "$batch/": "./client/batch/",
-    "$components/": "./client/components/"
+    "$utils/": "./utils/",
+    "$types/": "./types/",
+    "$islands/": "./islands/",
+    "$data/": "./data/",
+    "$batch/": "./batch/",
+    "$components/": "./components/"
   },
   "compilerOptions": {
     "lib": [
